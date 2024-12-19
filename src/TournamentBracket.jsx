@@ -3,7 +3,7 @@ import React from "react";
 const MATCH_WIDTH = 300;
 const PLAYER_HEIGHT = 100;
 const HORIZONTAL_GAP = 100;
-const BASE_PADDING = 20;
+const BASE_PADDING = 40;
 const DEFAULT_HEIGHT = 200;
 
 const SNAKE_COLORS = [
@@ -17,7 +17,7 @@ const SNAKE_COLORS = [
   "bg-orange-200",
 ];
 
-export default function TournamentBracket({ tournament }) {
+export default function TournamentBracket({ tournament, isPolling }) {
   if (!tournament?.rounds) {
     return null;
   }
@@ -25,16 +25,19 @@ export default function TournamentBracket({ tournament }) {
   const rounds = tournament.rounds;
   const totalWidth = rounds.length * (MATCH_WIDTH + HORIZONTAL_GAP);
 
-  function getMatchHeight(match) {
+  function getMatchHeight(match, isInProgress) {
     const playerCount = match?.players?.length || 0;
-    return playerCount === 0 ? DEFAULT_HEIGHT : playerCount * PLAYER_HEIGHT;
+    return playerCount === 0
+      ? DEFAULT_HEIGHT
+      : playerCount * PLAYER_HEIGHT + (isInProgress ? 20 : 0);
   }
 
-  function getVerticalGap(match) {
-    return getMatchHeight(match) + BASE_PADDING;
+  function getVerticalGap(match, isInProgress) {
+    return getMatchHeight(match) + BASE_PADDING + (isInProgress ? 20 : 0);
   }
 
   const firstRoundMatches = rounds[0]?.matches || [];
+
   const totalHeight = firstRoundMatches.reduce((acc, match) => {
     return acc + getVerticalGap(match);
   }, 0);
@@ -90,8 +93,10 @@ export default function TournamentBracket({ tournament }) {
     if (!match?.players) return null;
 
     const { x, y } = getMatchPosition(roundIndex, matchIndex);
-    const matchHeight = getMatchHeight(match);
-    const isInProgress = match.players.length > 0 && !match.winnerPlayerId;
+    const isInProgress =
+      match.players.length > 0 && !match.winnerPlayerId && isPolling;
+
+    const matchHeight = getMatchHeight(match, isInProgress);
 
     return (
       <foreignObject
