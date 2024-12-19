@@ -59,7 +59,8 @@ export default function TournamentBracket({ tournament, isPolling }) {
     if (!player) return null;
 
     const isWinner = player.id === match.winnerPlayerId;
-    const isSecond = player.id === match.secondPlacePlayerId;
+    const isSecond =
+      player.id === match.secondPlacePlayerId && match.players.length > 2;
     const snakeColor = getSnakeColor(player.id);
 
     return (
@@ -73,13 +74,13 @@ export default function TournamentBracket({ tournament, isPolling }) {
             : ""
         }`}
       >
-        <div className="text-xs text-black font-mono opacity-75 break-words">
+        <div className="text-xs text-black font-mono opacity-75 break-words max-h-[1.2em] overflow-hidden">
           {player.name}
         </div>
         <div
           className={`font-mono text-sm ${isWinner && "font-bold text-xl"} ${
             isSecond && "font-bold"
-          } text-black leading-tight break-words mt-1`}
+          } text-black leading-tight break-words mt-1 max-h-[1.2em] overflow-hidden`}
         >
           {player.snakeName}
           {isWinner && " 🏆"}
