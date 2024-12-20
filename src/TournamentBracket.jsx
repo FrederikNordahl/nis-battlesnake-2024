@@ -78,11 +78,12 @@ export default function TournamentBracket({ tournament, isPolling }) {
           {player.name}
         </div>
         <div
-          className={`font-mono text-sm ${isWinner && "font-bold text-xl"} ${
+          className={`font-mono text-sm ${isWinner && "font-bold text-sm"} ${
             isSecond && "font-bold"
           } text-black leading-tight break-words mt-1 max-h-[1.2em] overflow-hidden`}
         >
-          {player.snakeName}
+          {player.snakeName} (
+          {(match.playerWinCounts && match.playerWinCounts[player.id]) || 0})
           {isWinner && " 🏆"}
           {isSecond && " 🥈"}
         </div>

@@ -67,6 +67,7 @@ export default function App() {
           try {
             const data = await fetchTournament(savedId);
             setTournament(data);
+            startPolling(savedId);
           } catch (err) {
             // If the tournament can't be loaded, clear the saved ID
             clearSavedTournamentId();
@@ -237,6 +238,13 @@ export default function App() {
 
       {isAdmin && (
         <>
+          <button
+            onClick={() => setIsAdmin(false)}
+            disabled={loading || players.length < 2}
+            className="flex items-center px-6 py-2 border-2 border-pink-500 text-pink-500 hover:bg-pink-500/20 disabled:opacity-50 font-mono rounded-lg"
+          >
+            HIDE ADMIN
+          </button>
           <div className="mt-8 mb-8">
             <div className="p-6 border-2 border-pink-500 bg-purple-900/80 backdrop-blur rounded-lg">
               <h2 className="text-lg font-mono text-pink-500 mb-6">
@@ -307,6 +315,18 @@ export default function App() {
                     >
                       <ChevronRight className="h-4 w-4 mr-2" />
                       ADVANCE ROUND
+                    </button>
+                    <button
+                      onClick={() => {
+                        setTournament(null);
+                        setTournamentIdInput("");
+                        clearSavedTournamentId();
+                        stopPolling();
+                      }}
+                      disabled={loading}
+                      className="flex items-center px-6 py-2 border-2 border-pink-500 text-pink-500 hover:bg-pink-500/20 disabled:opacity-50 font-mono rounded-lg"
+                    >
+                      RESET TOURNAMENT
                     </button>
                   </>
                 )}
